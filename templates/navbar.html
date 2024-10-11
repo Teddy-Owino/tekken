@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">TEKKEN</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/uploadmachinery">Upload Machinery</a>
+          </li>
+
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#"></a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/uploadmachinery"></a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/fashion"></a></li>
+            </ul>
+          </li> -->
+          
+        </ul>
+        <form class="d-flex" role="search">
+          
+          <!-- chech iff session  -->
+          <!-- if exists the user should not see login and registerbuttons -->
+          <!-- user only to see their email and logout bitton -->
+
+          {% if session['key'] %}
+          <!-- user exists -->
+              <b class="text-info">Welcome, {{ session['key'] }}</b>
+              <a href="/logout" class="btn btn-outline-info">Logout</a>
+
+          {% else %}
+
+          <!-- user doesnt exist -->
+              <a class="btn bg-muted me-2" href="/login">Login</a>
+              <a class="btn bg-info" href="/register">Register</a>
+          {% endif %}
+          
+
+        </form>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+  

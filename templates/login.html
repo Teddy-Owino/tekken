@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/lightslider.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- js supporting files  -->
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/lightslider.js"></script>
+    <script src="../static/js/script.js"></script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <b class="text-success">{{message}}</b>
+    <b class="text-success">{{error}}</b>
+
+
+
+    <section class="row">
+        <div class="col-md-6 ms-5">
+            <div class="card shadow p-2">
+                    <b class="text-success">{{ message }}</b>
+                    <b class="text-danger">{{ error }}</b>
+                <h1 class="text-success">Login</h1>
+                <form action="/login" method="post">
+            
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" required><br>
+            
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" required><br>
+            
+            
+                   
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Login</button>
+                      <a href="/login">Dont have an Account? Click to Register</a>
+                    </div>
+                  </form>
+            </div>
+        </div>
+    </section>
+    
+</body>
+</html>
+
+
