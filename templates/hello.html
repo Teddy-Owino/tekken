@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        /* Simple sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 56px; /* Adjust according to your navbar height */
+            left: 0;
+            width: 200px;
+            height: calc(100% - 56px); /* Full height minus navbar */
+            background: #f8f9fa; /* Light background */
+            padding-top: 20px;
+        }
+        .content {
+            margin-left: 220px; /* Space for sidebar */
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">TEKKEN</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/uploadmachinery">Upload Machinery</a>
+                    </li>
+                    {% if session['role'] == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin_dashboard">Admin Dashboard</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <form class="d-flex">
+                    {% if 'key' in session %}
+                        <span class="navbar-text">Welcome, {{ session['key'] }}</span>
+                        <a href="/logout" class="btn btn-outline-info">Logout</a>
+                    {% else %}
+                        <a class="btn btn-outline-info" href="/login">Login</a>
+                        <a class="btn btn-outline-warning" href="/register">Register</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/user">User Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/settings">Settings</a>
+            </li>
+            <!-- Additional links can be added here -->
+        </ul>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

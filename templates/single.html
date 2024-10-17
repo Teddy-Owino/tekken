@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single item</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- include navBar  -->
+        {% include 'navbar.html' %}
+
+        <section class="row">
+            <div class="col-md-4 p-5">
+                <img src="../static/images/{{ car[5] }}" alt="{{ car[1] }}" class="w-100">
+            </div>
+
+            <div class="col-md-8 p-5 ">
+                <!-- title -->
+                <h3 class="text-warning">{{car[1]}}</h3>
+                <br>
+                <p>{{car[2]}}</p>
+                <br>
+                <p class="text-danger"><b>Category :</b> {{car[4]}}</p><br>
+                <p class="text-success"><b>Product quantity</b>: 3</p><br>
+                <p class="text-danger"><b>Cost :</b> Ksh {{car[3]}}</p><br>
+
+                <button class="btn btn-primary text-center w-50">Buy Now</button>
+
+
+            </div>
+        </section>
+    </div>
+</body>
+</html>
