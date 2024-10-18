@@ -174,7 +174,7 @@ def login():
 
 def handle_user_role(user_type):
     if user_type == 'admin':
-        return redirect('/admin')
+        return redirect('/admin_dashboard')
     else:
         return redirect('/')
 
@@ -385,10 +385,10 @@ def settings():
     
     return render_template("settings.html")
 
-# @app.route("/admin_dashboard")
-# def admin_dashboard():
+@app.route("/admin_dashboard")
+def admin_dashboard():
     
-#     return render_template("admin_dashboard.html", users=users) 
+    return render_template("admin_dashboard.html", users=users) 
 
 @app.route("/delete_products")
 def delete_products():
@@ -479,7 +479,7 @@ def delete_product(product_id):
     cursor.close()
     connection.close()
     
-    return redirect(url_for('admin_dashboard'))
+    return redirect('/admin_dashboard')
 
 @app.route("/all_motorbikes")
 def all_motorbikes():
@@ -559,9 +559,7 @@ def payment_records():
     return render_template("payment_records.html", records=records)
 
 # admin user access dashbord route
-@app.route('/admin')
-def admin_dashboard():
-    return render_template('/admin/dashboard.html')
+
 
 
 if __name__== "__main__":
