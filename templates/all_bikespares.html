@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <Title>Tekken</Title>
+    <title>Tekken</title>
+    
     <link rel="stylesheet" href="path/to/your/styles.css">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/bootstrap.css">
@@ -43,14 +44,15 @@
     <script src="../static/js/script.js"></script>
 </head>
 <body>
-    <div class="bg-primary d-flex justify-content-between text-white p-2">
-        <h1 class="text-center">Bicycle </h1>
-        <a href="/" class="outline-info text-white">Back</a>
+    <div class="bg-primary text-center d-flex justify-content-between text-white p-2">
+        <h1>MotorBike spares</h1>
+        <a href="/sparepart" class="outline-info text-white">Back</a>
     </div>
+    
     <div class="container">
         <section class="p-4 slider">
             <div class="row">
-                {% for singlemotorbike in bicycle %}
+                {% for singlemotorbike in bikespares %}
                     <div class="col-md-4 mb-3">
                         <div class="box">
                             <div class="slide-img">

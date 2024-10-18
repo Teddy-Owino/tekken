@@ -27,13 +27,17 @@
     <div class="container-fluid">
         <!-- insert navbar.html using jinja2 templates -->
         {% include 'navbar.html' %}
-        {% include 'carousel.html' %}
+        
         
         
 
         <!-- insert all phones from the db -->
         <br>
-        <h3 class="bg-info p-2 text-white">Car Spares Accessories</h3>
+        <h1 class="text-warning p-4"><marquee behavior="" direction="left" >Welcome! Get any product of your choice at an affordable price.</marquee></h1>
+        <div class="d-flex justify-content-between bg-info text-white p-2">
+            <h3 class="text-white">Car Spares</h3>
+            <a href="all_carspares" class="outline-info">See More</a>
+        </div>
         <section class="slider p-4">
             <ul class="cs-hidden autoWidth">
                 <!-- we stored phones in an item variable called phones 
@@ -74,7 +78,7 @@
         <br>
         <div class="d-flex justify-content-between bg-info text-white p-2">
             <h3 class="text-white">Motorbike</h3>
-            <a href="car.html" class="outline-info">See More</a>
+            <a href="all_bikespares" class="outline-info">See More</a>
         </div>
         <section class="slider p-4">
             <ul class="cs-hidden autoWidth">
@@ -114,7 +118,10 @@
             </ul>
         </section>
         <br>
-        <h3 class="bg-info p-2 text-white">Bicycles spares</h3>
+        <div class="d-flex justify-content-between bg-info text-white p-2">
+            <h3 class="text-white">Bicycle Spares</h3>
+            <a href="all_bispares" class="outline-info">See More</a>
+        </div>
         <section class="slider p-4">
             <ul class="cs-hidden autoWidth">
                 <!-- we stored phones in an item variable called phones 
@@ -154,7 +161,10 @@
         </section>
 
         <br>
-        <h3 class="bg-info p-2 text-white">TukTuk spares</h3>
+        <div class="d-flex justify-content-between bg-info text-white p-2">
+            <h3 class="text-white">TukTuk</h3>
+            <a href="all_sparetuk" class="outline-info">See More</a>
+        </div>
         <section class="slider p-4">
             <ul class="cs-hidden autoWidth">
                 <!-- we stored phones in an item variable called phones 

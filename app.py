@@ -2,7 +2,8 @@ from flask import *
 import pymysql
 import re
 from werkzeug.security import generate_password_hash
-import bcrypt
+from flask_mail import Mail, Message  # For sending emails (optional)
+from mpesa import *
 
 
 app = Flask(__name__)
@@ -64,8 +65,10 @@ def singleP(product_id):
     cursor.execute(sql, product_id)
 # get thye single product
     car = cursor.fetchone()
+    # Retrieve phone from session if available
+    phone = session.get('phone', '')  # Default to empty string if not found
 
-    return render_template("single.html", car = car)
+    return render_template("single.html", car = car, phone = phone)
 
 
 def is_valid_password(password):
@@ -141,7 +144,7 @@ def register():
 
 
 
-@app.route("/login", methods=['POST', 'GET'])
+@app.route("/login", methods=['POST', 'GET']) 
 def login():
     if request.method == 'POST':
         email = request.form['email']
@@ -157,6 +160,7 @@ def login():
         user = cursor.fetchone()
 
         if user:
+            session['key'] = user[0]  # Set session key (use user ID or similar)
             session['username'] = user[1]  # Assuming username is at index 1
             session['user_type'] = user[6]  # Assuming user type is at index 6
             
@@ -166,9 +170,11 @@ def login():
     else:
         return render_template("login.html")
 
+
+
 def handle_user_role(user_type):
     if user_type == 'admin':
-        return redirect('/admin_dashboard')
+        return redirect('/admin')
     else:
         return redirect('/')
 
@@ -275,6 +281,21 @@ def uploadMachinery():
 
     else:
         return render_template("uploadmachinery.html", error = 'Please add any product')
+    
+
+@app.route("/all_bikespares")
+def all_bikespares():
+    """
+    Render the page displaying all motorbikes.
+    """
+    connection = pymysql.connect(host='localhost', user='root', password='', database='tekken')
+
+    cursor = connection.cursor()
+    sql = "SELECT * FROM products WHERE product_category = 'bikespares'" # Fetch all motorbikes
+    cursor.execute(sql)
+    bikespares = cursor.fetchall()
+    cursor.close()
+    return render_template('all_bikespares.html', bikespares=bikespares)
 
 @app.route("/contact")
 def contact():
@@ -283,6 +304,20 @@ def contact():
 @app.route("/services")
 def services():
     return render_template("services.html")
+
+@app.route("/all_carspares")
+def all_carspares():
+    """
+    Render the page displaying all motorbikes.
+    """
+    connection = pymysql.connect(host='localhost', user='root', password='', database='tekken')
+
+    cursor = connection.cursor()
+    sql = "SELECT * FROM products WHERE product_category = 'carspares'" # Fetch all motorbikes
+    cursor.execute(sql)
+    carspares = cursor.fetchall()
+    cursor.close()
+    return render_template('all_carspares.html', carspares=carspares)
 
 @app.route("/add_item", methods=['POST'])
 def add_item():
@@ -294,6 +329,19 @@ def add_item():
 
     # You might want to return some response
     return jsonify({'count': session['item_count']})
+@app.route("/all_bispares")
+def all_bispares():
+    """
+    Render the page displaying all motorbikes.
+    """
+    connection = pymysql.connect(host='localhost', user='root', password='', database='tekken')
+
+    cursor = connection.cursor()
+    sql = "SELECT * FROM products WHERE product_category = 'bispares'" # Fetch all motorbikes
+    cursor.execute(sql)
+    bispares = cursor.fetchall()
+    cursor.close()
+    return render_template('all_bispares.html', bispares=bispares)
 
 
 @app.route("/logout")
@@ -301,6 +349,7 @@ def logout():
     session.clear()  
   
     return redirect("/login")
+
 @app.route("/all_tuk")
 def all_tuk():
     """
@@ -316,12 +365,30 @@ def all_tuk():
     return render_template('all_tuk.html', tuktuk=tuktuk)
 
 
+@app.route("/all_sparetuk")
+def all_sparetuk():
+    """
+    Render the page displaying all motorbikes.
+    """
+    connection = pymysql.connect(host='localhost', user='root', password='', database='tekken')
+
+    cursor = connection.cursor()
+    sql = "SELECT * FROM products WHERE product_category = 'sparetuk'" # Fetch all motorbikes
+    cursor.execute(sql)
+    sparetuktuk = cursor.fetchall()
+    cursor.close()
+    return render_template('all_sparetuk.html', sparetuktuk=sparetuktuk)
 
 
-@app.route("/admin_dashboard")
-def admin_dashboard():
+@app.route("/settings")
+def settings():
     
-    return render_template("admin_dashboard.html", users=users) 
+    return render_template("settings.html")
+
+# @app.route("/admin_dashboard")
+# def admin_dashboard():
+    
+#     return render_template("admin_dashboard.html", users=users) 
 
 @app.route("/delete_products")
 def delete_products():
@@ -404,7 +471,7 @@ def delete_product(product_id):
     cursor = connection.cursor()
 
     # Execute the delete query
-    cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
+    cursor.execute("DELETE FROM products WHERE product_id = %s", (product_id,))
     connection.commit()
     
     flash('Product deleted successfully!', 'success')
@@ -438,8 +505,63 @@ def delete_user(user_id):
     return redirect('/admin_dashboard')
 
 
+# mpesa
+# implement STK PUSH
+@app.route("/mpesa", methods=['POST'])
+def mpesa():
+    phone = request.form["phone"]
+    amount = request.form["amount"]
+
+    # Use the mpesa_payment function
+    payment_success = mpesa_payment(amount, phone)
+
+    if payment_success:
+        return render_template("payment_success.html", phone=phone, amount=amount)
+    else:
+        return '<h1>Payment failed. Please try again.</h1>' \
+               '<a href="/" class="btn btn-dark btn-sm">Go Back to products</a>'
 
 
+
+
+def mpesa_payment(amount, phone):
+    # Simulate payment processing logic
+    payment_success = True  # Simulate success for now
+    
+    if payment_success:
+        # Store payment record in the database
+        with pymysql.connect(host='localhost', user='root', password='', database="tekken") as connection:
+            with connection.cursor() as cursor:
+                username = session['username']  # Get the username from the session
+                sql = "INSERT INTO payment_records (username, phone, amount, status) VALUES (%s, %s, %s, %s)"
+                cursor.execute(sql, (username, phone, amount, 'Completed'))
+                connection.commit()
+
+                # Store phone in session
+                session['phone'] = phone
+    
+    return payment_success
+
+
+@app.route("/payment_records")
+def payment_records():
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect if not logged in
+
+    username = session['username']
+    
+    with pymysql.connect(host='localhost', user='root', password='', database="tekken") as connection:
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM payment_records WHERE username = %s"
+            cursor.execute(sql, (username,))
+            records = cursor.fetchall()
+
+    return render_template("payment_records.html", records=records)
+
+# admin user access dashbord route
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('/admin/dashboard.html')
 
 
 if __name__== "__main__":
